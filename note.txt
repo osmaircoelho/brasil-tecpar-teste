@@ -1,0 +1,60 @@
+desativar e ativar debug bar
+C:\Users\coelho\Documents\projects\brasil-tecpar\site\config\packages\dev\web_profiler.yaml
+
+
+Well, I just needed to require Validator.
+I ran composer require validator and then
+I ran php bin/console doctrine:migrations:diff and it just worked.
+
+
+php bin/console make:migration
+php bin/console doctrine:migrations:migrate
+
+#env
+https://stackoverflow.com/questions/52151783/symfony-4-get-env-parameter-from-a-controller-is-it-possible-and-how
+
+#command Symfony
+https://hotexamples.com/examples/symfony.component.console.helper/Table/setRows/php-table-setrows-method-examples.html
+
+#https://issueexplorer.com/issue/symfony/symfony/44289
+
+https://laraveling.tech/rate-limit-com-laravel/
+https://needlify.com/post/how-to-implement-the-rate-limiter-component-on-a-symfony-5-project-ac6b0982
+
+====================if you have time do it!!====================
+https://www.nginx.com/blog/rate-limiting-nginx/
+https://mundoapi.com.br/tutoriais/segurando-o-avalanche-como-limitar-o-acesso-de-uma-api/
+https://blogdagcom.wordpress.com/2019/02/18/como-implementar-um-sistema-distribuido-de-throttling-com-nginx-lua-redis/
+
+app.config
+
+http {
+    limit_req_zone $binary_remote_addr zone=one:10m rate=10r/s;
+        server {
+            listen 80;
+            index index.php index.html;
+            error_log  /var/log/nginx/app.error.log;
+            access_log /var/log/nginx/app.access.log;
+
+            root /var/www/site/public;
+
+            location ~ \.php$ {
+                fastcgi_buffer_size 32k;
+                fastcgi_buffers 4 32k;
+                try_files $uri =404;
+                fastcgi_split_path_info ^(.+\.php)(/.+)$;
+                fastcgi_pass app:9000;
+                fastcgi_index index.php;
+                include fastcgi_params;
+                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                fastcgi_param PATH_INFO $fastcgi_path_info;
+            }
+
+            location / {
+                try_files $uri $uri/ /index.php?$query_string;
+                gzip_static on;
+                limit_req zone=one burst=5;
+            }
+        }
+}
+
